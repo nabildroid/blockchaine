@@ -8,6 +8,7 @@ const targetConfig = env => {
 module.exports = env => {
     return WebpackMerge(
         {
+            entry: "./public/main.ts",
             resolve: {
                 extensions: [".ts", ".js", ".json"]
             },

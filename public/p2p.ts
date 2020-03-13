@@ -8,17 +8,23 @@ class P2P {
     _receive: callback;
 
     id: number;
-    constructor(id: number) {
+    index: number; // auto generated
+    constructor(id: number, init: boolean = false) {
         // init class
         this.peer = new SimplePeer({
-            initiator: true
+            initiator: init,
+            trickle: false
         });
         this.linked = false;
         this.id = id;
+        this.index = Math.floor(Math.random() * 100000);
 
         // init peer life cycles
         this.peer.on("signal", s => (this.signal = JSON.stringify(s)));
-        this.peer.on("connect", () => (this.linked = true) && this.conneced());
+        this.peer.on("connect", () => {
+            this.linked = true;
+            this.conneced();
+        });
         this.peer.on("data", data => {
             if (this._receive) this._receive(data, this.id);
         });
@@ -30,8 +36,7 @@ class P2P {
             const checker = setInterval(() => {
                 if (this.signal) {
                     clearInterval(checker);
-                    const signal = this.signal;
-                    return resolve(signal);
+                    return resolve(this.signal);
                 }
             }, 50);
         });
@@ -48,7 +53,9 @@ class P2P {
     receive(fct: callback) {
         this._receive = fct;
     }
-    conneced() {}
+    conneced() {
+        console.log(`${this.id} is connected`);
+    }
     destroy() {
         this.peer.destroy();
     }
