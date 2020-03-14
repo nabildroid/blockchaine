@@ -6,7 +6,7 @@ module.exports.entry = entry;
 module.exports.config = () => ({
     mode: "development",
     entry,
-    plugins: [new htmlWebpackPlugin()],
+    plugins: [new htmlWebpackPlugin({ template: "./public/template.html" })],
     devServer: {
         disableHostCheck: true,
         historyApiFallback: true,

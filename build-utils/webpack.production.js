@@ -4,5 +4,6 @@ const htmlWebpackPlugin = require("html-webpack-plugin");
 module.exports.config = () => ({
     mode: "production",
     entry,
-    plugins: [new htmlWebpackPlugin()]
+    plugins: [new htmlWebpackPlugin({ template: "./public/template.html" })],
+    devtool: "eval"
 });

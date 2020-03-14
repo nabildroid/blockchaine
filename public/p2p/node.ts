@@ -7,17 +7,29 @@ import * as server from "./server";
  * Broadcast to many
  * listen to one broadcaster
  */
+interface NodeEvents {
+    connected?: (peers: P2P[]) => void;
+    peerJoined?: (peer: P2P) => void;
+    receive?: (data: any) => void;
+}
+
 class Node {
     id: number;
     nodes: P2P[]; // this node listen to broadcasters
     connections: P2P[]; // this node broadcast
+    events: NodeEvents;
+
     constructor() {
         this.nodes = [];
         this.connections = [];
+        this.events = {};
         this.id = Math.round(Math.random() * 10000);
         console.log(`Node ID:${this.id}`);
+
         server.listeners(this.id, this.listeners.bind(this));
+        this.waitForConnection();
     }
+
     /**
      * connect to all broadcasters as a listener
      */
@@ -74,12 +86,35 @@ class Node {
                     peer.id = node.id;
                     peer.setSignal(node.signal);
                     this.broadcast();
+
+                    // emit event
+                    if (this.events.peerJoined) this.events.peerJoined(peer);
                 } catch (e) {
                     console.error("response to listener error", e);
                 }
             }
         });
         console.log("listener event finished");
+    }
+
+    linkedPeers() {
+        const peers = this.nodes
+            .concat(this.connections)
+            .filter(peer => peer.linked);
+        return peers;
+    }
+    waitForConnection() {
+        const check = setInterval(() => {
+            const peers = this.linkedPeers();
+            if (peers.length) {
+                clearInterval(check);
+                if (this.events.connected) this.events.connected(peers);
+            }
+        }, 50);
+    }
+
+    on(action: keyof NodeEvents, callback: any) {
+        this.events[action] = callback;
     }
 
     send(data: Object) {
@@ -92,6 +127,7 @@ class Node {
             Math.abs(new Date().getTime() - time)
         );
     }
+    connected() {}
 }
 
 export default Node;

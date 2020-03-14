@@ -1,4 +1,12 @@
 const SHA256 = require("crypto-js/sha256");
+
+export type BlockType = {
+    data: object;
+    timestamp: number;
+    lastHash: string;
+    hash: string;
+};
+
 export default class Block {
     timestamp: number;
     lastHash: string;
