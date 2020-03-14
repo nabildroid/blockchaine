@@ -3,7 +3,7 @@ import Node from "./node";
 const mine = new Node();
 mine.connectToNodes().then(() => {
     setInterval(() => {
-        console.log("hello world");
-        mine.send({ text: "hello webrtc" });
+        console.log("Hello world");
+        mine.send({ time: new Date().getTime() });
     }, 1000);
 });

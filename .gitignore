@@ -2,4 +2,6 @@
 /dist
 /lib
 /tests-dev
-/.firebase
+/.**
+*.log
+package-lock.json

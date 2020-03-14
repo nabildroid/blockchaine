@@ -11,18 +11,4 @@ firebase.initializeApp({
 });
 export const db = firebase.firestore();
 
-type userDoc = {
-    id: number;
-    signal: string;
-    timestamp: any;
-};
-export const users = async (id: number): Promise<userDoc[]> => {
-    const query = db.collection("users").orderBy("timestamp");
-    let { docs } = await query.get();
-    docs = docs.map(d => d.data());
-    docs = docs.filter(d => d != id);
-
-    return docs;
-};
-
 export const timestamp = () => firebase.firestore.FieldValue.serverTimestamp();
