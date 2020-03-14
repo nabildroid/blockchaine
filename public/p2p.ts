@@ -13,7 +13,8 @@ class P2P {
         // init class
         this.peer = new SimplePeer({
             initiator: init,
-            trickle: false
+            trickle: false,
+            objectMode: true
         });
         this.linked = false;
         this.id = id;
@@ -26,7 +27,7 @@ class P2P {
             this.conneced();
         });
         this.peer.on("data", data => {
-            if (this._receive) this._receive(data, this.id);
+            if (this._receive) this._receive(JSON.parse(data), this.id);
         });
         this.peer.on("close", () => (this.linked = false));
         this.peer.on("error", this.error);

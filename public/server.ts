@@ -11,9 +11,21 @@ export type ListenerType = BroadcastType & {
     channel: number;
 };
 
+/**
+ * fetch all broadcaster available in network
+ * @param id exclude broadcaster of id = `id`
+ */
 export const broadcasters = async (id: number): Promise<BroadcastType[]> => {
-    const query = db.collection("broadcast").orderBy("timestamp");
-    let { docs } = await query.get();
+    //fetch broadcast documents
+    const ref = db.collection("broadcast");
+    let queries = [ref.where("id", ">", id), ref.where("id", "<", id)];
+    queries = await Promise.all(queries.map(q => q.get()));
+
+    //extract docs array from each query
+    let docs = [];
+    queries.forEach(q => docs.push(...q.docs));
+    console.log(docs);
+
     docs = docs.map(d => ({ ref: d.ref, ...d.data() }));
     docs = docs.filter(d => d != id);
 
@@ -57,17 +69,16 @@ export const listeners = (
 };
 export const listen = (
     id: number,
-    index: number,
-    signal: string,
+    answar: string,
     broadcast: BroadcastType
 ) => {
     console.log("going to listen");
-    console.log(signal);
+    console.log(answar);
     db.collection("listener").add({
         id,
-        index,
-        signal,
+        signal: answar,
         channel: broadcast.id,
+        index: broadcast.index,
         timestamp: timestamp()
     });
 };
