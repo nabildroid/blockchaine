@@ -1,4 +1,4 @@
-import Block from "./block";
+import Block, { BlockType } from "./block";
 
 export default class BlockChain {
     chain: Block[];
@@ -6,9 +6,15 @@ export default class BlockChain {
         this.chain = [Block.genesis()];
     }
 
-    addBlock(data: object) {
+    async addBlock(data: object) {
         const lastBlock = this.chain[this.chain.length - 1];
-        const block = Block.mineBlock(lastBlock, data);
+        let start = new Date().getTime();
+        const block = await Block.mineBlock(lastBlock, data);
+        console.log(
+            `mining block took :${Math.round(
+                (block.timestamp - start) / 1000
+             )}s`
+        );
         this.chain.push(block);
 
         return block;
@@ -32,5 +38,14 @@ export default class BlockChain {
                 return false;
         }
         return true;
+    }
+    static async addChain(bc: BlockChain, chain: object[]) {
+        async function* addGenerator() {
+            for (const block of chain) {
+                yield await bc.addBlock(block);
+            }
+        }
+        const add = addGenerator();
+        while (!(await add.next()).done);
     }
 }
