@@ -1,4 +1,5 @@
 const htmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const entry = "./public/main.ts";
 
@@ -6,17 +7,17 @@ module.exports.entry = entry;
 module.exports.config = () => ({
     mode: "development",
     entry,
-    plugins: [new htmlWebpackPlugin({ template: "./public/template.html" })],
-    devServer: {
-        disableHostCheck: true,
-        historyApiFallback: true,
-        publicPath: `http://localhost:8080/`,
-        proxy: {
-            "*": `http://localhost:8080`
-        },
-        headers: {
-            "Access-Control-Allow-Origin": "*"
-        },
-        port: 8080
-    }
+    module:{
+        rules:[
+            {
+                test: /\.css$/i,
+                use: [MiniCssExtractPlugin.loader, 'css-loader']
+            }
+        ]
+    },
+    plugins: [new htmlWebpackPlugin({
+        meta: {viewport: 'width=device-width, initial-scale=1'}
+    }),
+        new MiniCssExtractPlugin()
+    ]
 });

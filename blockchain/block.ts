@@ -49,29 +49,38 @@ export default class Block {
 
         return new this(timestamp, data, lastHash, nonce, hash);
     }
-    static async mineBlock(lastBlock: Block, data: object) {
+    static mineBlock(
+        lastBlock: Block,
+        data: object
+    ): Promise<Block> {
         const lastHash = lastBlock.hash;
 
-        const { nonce, timestamp, hash } = await this.findNonce(data, lastHash);
-
-        return new this(timestamp, data, lastHash, nonce, hash);
-    }
-
-    static async findNonce(
-        data: object,
-        lastHash: string
-    ): Promise<{ nonce: number; timestamp: number; hash: string }> {
-        return new Promise(resolve => {
-            let timestamp: number, hash: string;
+        return new Promise(res => {
             let nonce = -1;
-            do {
-                timestamp = new Date().getTime();
+            const i = setInterval(() => {
+                const timestamp = Date.now();
                 nonce++;
+                const hash = this.generateHash(
+                    timestamp,
+                    data,
+                    lastHash,
+                    nonce
+                );
+                const done =
+                    hash.substr(0, DIFFICULTY) === "0".repeat(DIFFICULTY);
 
-                hash = this.generateHash(timestamp, data, lastHash, nonce);
-            } while (hash.substr(0, DIFFICULTY) !== "0".repeat(DIFFICULTY));
-
-            return resolve({ timestamp, nonce, hash });
+                if (done) {
+                    clearInterval(i);
+                    const newBlock = new this(
+                        timestamp,
+                        data,
+                        lastHash,
+                        nonce,
+                        hash
+                    );
+                    res(newBlock);
+                }
+            });
         });
     }
 

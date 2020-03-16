@@ -10,12 +10,12 @@ module.exports = env => {
         {
             entry: "./public/main.ts",
             resolve: {
-                extensions: [".ts", ".js", ".json"]
+                extensions: [".js", ".jsx", ".json", ".ts", ".tsx"]
             },
             module: {
                 rules: [
                     {
-                        test: /\.ts$/,
+                        test: /\.(ts|tsx)$/,
                         use: "ts-loader"
                     }
                 ]

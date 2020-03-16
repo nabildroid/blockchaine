@@ -1,0 +1,155 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+body {
+    background-color: #eacdc2;
+    text-align: center;
+    color: #1a1423;
+}
+
+#title {
+    line-height: 2;
+    color: #372549;
+}
+
+#app > div {
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    flex-wrap: wrap;
+}
+@media (max-width: 880px) {
+    #app > div {
+        justify-content: center;
+        max-height:initial !important;
+    }
+}
+#app {
+    width: 80%;
+    margin: 0 auto;
+    min-width: 350px;
+    padding: 5px;
+}
+
+#app > div {
+    max-height: 80vh;
+    overflow: hidden;
+    min-width: 350px;
+}
+#app > div > div {
+    min-width: 350px;
+}
+#app #main {
+    flex: 0.5;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#app #blockchain {
+    flex: 0.4;
+    overflow-y: auto;
+    position: relative;
+}
+
+#app #add form {
+    display: flex;
+    flex-direction: column;
+    background: #774c60;
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 2em;
+}
+#app #add form textarea {
+    min-height: 200px;
+}
+#app #add form textarea,
+#app #add form input {
+    background: #86566c;
+    border: none;
+    padding: 8px;
+    font-family: monospace;
+    color: #eacdc2;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+#app #add form button {
+    background: #372549;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    padding: 5px 0;
+}
+
+#app #main .info {
+    display: flex;
+    justify-content: space-around;
+    background: #eae8ce;
+    border-radius: 5px;
+    border: 1px solid #c6c4af;
+    font-family: monospace;
+    margin-bottom: 1em;
+}
+
+#app #main .info div {
+    display: flex;
+    padding: 8px 0;
+}
+
+#app #main .info div * {
+    font-family: monospace;
+    font-size: 15px;
+}
+
+#app #main .info div b {
+    margin-right: 5px;
+}
+
+#app #blockchain .info {
+    display: flex;
+    justify-content: space-between;
+}
+#app #blockchain .info h2 {
+    margin-bottom: 10px;
+}
+
+#app #blockchain .info button {
+    padding: 5px;
+    background: #90cdf4;
+    border: none;
+    color: #1a1423;
+    font-weight: bold;
+    border-radius: 2px;
+}
+
+#app #blockchain .item {
+    background: #372549;
+    margin: 5px 0;
+    padding: 5px;
+    border-radius: 2px;
+    color: #ddd;
+    overflow: hidden;
+}
+
+#app #blockchain .item .info {
+    display: flex;
+    justify-content: space-between;
+    color: #b75d69;
+}
+
+#app #blockchain .item pre {
+    margin: 5px 8px;
+    overflow: hidden;
+    word-break: break-word;
+    white-space: normal;
+}
+
+#app #blockchain .item h4 {
+    font-family: monospace;
+    text-align: center;
+}

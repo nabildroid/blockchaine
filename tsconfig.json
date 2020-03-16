@@ -1,6 +1,7 @@
 {
     "exclude": ["./node_modules", "functions"],
     "compilerOptions": {
-        "target": "ESnext"
+        "target": "ESNext",
+        "jsx": "react"
     }
 }
