@@ -11,11 +11,12 @@ class Network extends Node {
     }
     push() {
         const chain: BlockType[] = this.bc.chain.map(
-            ({ data, timestamp, lastHash, hash, nonce }) => ({
+            ({ data, timestamp, lastHash, nonce, difficulty, hash }) => ({
                 data,
                 timestamp,
                 lastHash,
                 nonce,
+                difficulty,
                 hash
             })
         );
@@ -24,8 +25,22 @@ class Network extends Node {
     }
     receive(data: BlockType[]) {
         const chain = data.map(block => {
-            const { data, timestamp, lastHash, hash, nonce } = block;
-            return new Block(timestamp, data, lastHash, nonce, hash);
+            const {
+                data,
+                timestamp,
+                lastHash,
+                nonce,
+                difficulty,
+                hash
+            } = block;
+            return new Block(
+                timestamp,
+                data,
+                lastHash,
+                nonce,
+                difficulty,
+                hash
+            );
         });
         const agree = this.bc.replaceChain(chain);
         if (this.events.receive) this.events.receive(agree);

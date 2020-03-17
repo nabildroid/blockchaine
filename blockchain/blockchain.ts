@@ -1,5 +1,6 @@
-import Block, { BlockType } from "./block";
+import Block from "./block";
 
+export const MINI_RATE = 1000;
 export default class BlockChain {
     chain: Block[];
     constructor() {
@@ -29,11 +30,25 @@ export default class BlockChain {
 
     static validate(chain: Block[]) {
         if (chain[0].stringify() != Block.genesis().stringify()) return false;
-        for (let i = 0; i < chain.length - 1; i++) {
+        for (let i = 1; i < chain.length; i++) {
             const block = chain[i];
+            const prev = chain[i - 1];
+            // verify matching hashes
             if (
-                block.hash != chain[i + 1].lastHash ||
-                Block.blockHash(block) != block.hash
+                prev.hash != block.lastHash ||
+                Block.blockHash(block) !== block.hash
+            )
+                return false;
+
+            // // vefiry matching difficuly
+            const timestampDifference = block.timestamp - prev.timestamp;
+            const difficulty =
+                prev.difficulty + (timestampDifference >= MINI_RATE ? -1 : 1);
+
+            if (
+                difficulty !== block.difficulty
+                ||
+                block.hash.substr(0, difficulty) !== "0".repeat(difficulty)
             )
                 return false;
         }

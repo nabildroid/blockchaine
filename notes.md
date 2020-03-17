@@ -62,3 +62,34 @@ Hash(block + nonce) = "0...0XXXXXX...";
 Finding the right `nonce` that satisfy the equation, takes big computational time, which increase by increasing the `difficulty`
 
 the Difficulty control the rate of adding new blocks to blockchain
+## dynamic Difficulty
+
+in order to stop mining blocks to fast or help to speed up the slowly mined block, a dynamic difficulty must exist
+
+-   increase the **difficulty** if the difference between current block timestamp - previous block timestamp is **longer** than `MINI_RATE`
+
+-   lowers the difficulty if **difference** between current block timestamp - previous block timestamp is **less** than `MINI_RATE`
+
+each block must include its difficulty in its data because of the dynamic system relay on adjusting the previous block difficulty to be current block difficulty
+
+> only **geneses block** will takes a **constant difficulty**
+
+therefor the difficulty could grow to be much big then the starting difficulty (geneses block difficulty), and could decrease to be **0**.
+but such **changes** of difficulty happen by **1** or **-1** **for each block**
+
+there is a conjunction between the generated hash and difficulty
+
+-   the difficulty is included in the block hash
+-   each hash must start by the difficulty number of zeros
+
+```javascript
+const timestampDifference = block.timestamp - prev.timestamp;
+const difficulty =
+    prev.difficulty + (timestampDifference >= MINI_RATE ? -1 : 1);
+
+if (
+    difficulty === block.difficulty &&
+    block.hash.substr(0, difficulty) === "0".repeat(difficulty)
+)
+    return "Valide";
+```

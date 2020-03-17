@@ -19,7 +19,7 @@ class Block extends React.Component<BlockTemplate> {
                     <p><b>{state}</b></p>
                 </div>
                 <pre>{JSON.stringify(data)}</pre>
-                <h4>#{hash.substr(0,25)}</h4>
+                <h4>#{hash.substr(0,25)}...</h4>
             </div>
         )
     }
