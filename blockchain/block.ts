@@ -38,7 +38,7 @@ export default class Block {
         const timestamp = Date.now();
         const lastHash = lastBlock.hash;
         const hash = this.generateHash(timestamp, data, lastHash);
-        return new this(timestamp, ["hello world"], lastHash, hash);
+        return new this(timestamp, data, lastHash, hash);
     }
     static generateHash(timestamp: number, data: {}, lastHash: string): string {
         return SHA256(JSON.stringify({ ...arguments })).toString();
