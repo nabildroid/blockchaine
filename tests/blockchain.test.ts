@@ -1,8 +1,8 @@
 import BlockChain from "../blockchain/blockchain";
-import Block from "../blockchain/block";
+import Block,{DIFFICULTY} from "../blockchain/block";
 
 describe("BlockChain", () => {
-    let bc: BlockChain, bc2: BlockChain, chainData;
+    let bc, bc2, chainData;
     beforeEach(async () => {
         bc = new BlockChain();
         bc2 = new BlockChain();
@@ -20,9 +20,8 @@ describe("BlockChain", () => {
         expect(bc.chain[0]).toEqual(Block.genesis());
     });
 
-    it("adds new blocks", async () => {
-        await chainData.forEach(async (data, i) => {
-            await bc.addBlock(data);
+    it("adds new blocks",() => {
+        chainData.forEach((data, i) => {
             expect(bc.chain[i + 1].data).toEqual(data);
         });
     });
@@ -36,7 +35,7 @@ describe("BlockChain", () => {
         expect(BlockChain.validate(bc.chain)).toBe(false);
     });
     it("invalidates a chain that doesn't start with the Genises Block", () => {
-        bc.chain[0] = new Block(87, {}, "dff", 0, "ddff");
+        bc.chain[0] = new Block(87, {}, "dff", 0,DIFFICULTY ,"ddff");
 
         expect(BlockChain.validate(bc.chain)).toBe(false);
     });
@@ -55,4 +54,5 @@ describe("BlockChain", () => {
         bc.replaceChain(bc2.chain);
         expect(bc.chain).not.toEqual(bc2.chain);
     });
+
 });
