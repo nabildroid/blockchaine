@@ -6,7 +6,7 @@ type State = {
     status: string;
 }
 type Props = {
-    updateChain: () => void
+    validate: (agree:boolean) => void
 }
 class Status extends React.Component<Props, State> {
     state: State = {
@@ -35,7 +35,7 @@ class Status extends React.Component<Props, State> {
                         status: `BC ${agree ? "accepted" : "rejected"}!`
                     });
 
-                    if (agree) this.props.updateChain()
+                    this.props.validate(agree)
 
                     setTimeout(() =>
                         this.setState({ status })

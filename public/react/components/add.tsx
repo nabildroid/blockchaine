@@ -1,14 +1,15 @@
 import * as React from "react"
 
 import { bc } from "../../main";
+import { BlockTemplate } from "./block";
 
 type State = {
     id: string;
     data: string;
     mining: boolean;
 }
-type Props={
-    updateChain:()=>void
+type Props = {
+    addBlock: (block: BlockTemplate) => void
 }
 
 class Add extends React.Component<Props, State>{
@@ -29,16 +30,23 @@ class Add extends React.Component<Props, State>{
         if (id.length > 2 && data.length > 10) {
             this.setState({ mining: true });
 
-            bc.addBlock({id,data}).then(() => {
+            bc.addBlock({ id, data }).then((block) => {
+
                 this.setState({
                     id: "",
                     data: "",
                     mining: false
                 });
-                this.props.updateChain();
-            }
-            )
+                const { hash, timestamp } = block;
 
+                this.props.addBlock({
+                    id,
+                    timestamp,
+                    validation: 0,
+                    data,
+                    hash
+                });
+            })
         }
 
     }

@@ -1,18 +1,17 @@
 import * as React from "react"
 
-import {network} from "../../main";
+import { network } from "../../main";
 
-import Block,{BlockTemplate} from "../components/block";
-class Blockchain extends React.Component<{chain:BlockTemplate[]}>{
-    constructor(props){
-        super(props);
-    }
-    push(){
+import Block, { BlockTemplate } from "../components/block";
+type Props =  { blocks: readonly BlockTemplate[] }
+class Blockchain extends React.Component<Props>{
+
+    push() {
         console.log("Pushing ...")
         network.push();
     }
-    render(){
-        const {chain} = this.props;
+    render() {
+        const {blocks} = this.props
         return (
             <div id="blockchain">
                 <div className="info">
@@ -23,7 +22,7 @@ class Blockchain extends React.Component<{chain:BlockTemplate[]}>{
                 </div>
                 <div id="blockitems">
                     {
-                        chain.map(data=>(
+                        (blocks || []).concat().reverse().map(data => (
                             <Block {...data} key={data.timestamp} />
                         ))
                     }
